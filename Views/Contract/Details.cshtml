@@ -1,0 +1,31 @@
+@model ContractingPlatform.Models.Contract
+
+@{
+    ViewData["Title"] = "Details";
+    var entityList = ViewBag.EntityList as List<Entity>;
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Contract</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EntityA)
+        </dt>
+        <dd class = "col-sm-10">
+            @entityList.Find(e=>e.Id==Model.EntityA).Name
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EntityB)
+        </dt>
+        <dd class = "col-sm-10">
+            @entityList.Find(e=>e.Id==Model.EntityB).Name
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ContractId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    var entityList = ViewBag.EntityList as List<Entity>;
+    var contracts  = ViewBag.Contracts as List<Contract>;
+}
+
+<div id="cy" style="height: 75vh"></div>
+
+
+
+        <script>
+
+
+        // Assuming you have referenced jQuery
+        $(function() {
+            $.get("@Url.Action("Data")", function(response) {
+
+                var cy = cytoscape({
+                    container: document.getElementById('cy'),                
+
+                    style: [ // the stylesheet for the graph
+                        {
+                        selector: 'node',
+                        style: {
+                            'background-color': '#666',
+                            'label': 'data(name)'
+                        }
+                        },
+
+                        {
+                        selector: 'edge',
+                        style: {
+                            'width': 3,
+                            'line-color': '#ccc',
+                        }
+                        }
+                    ],
+
+                });
+
+                response.entities.forEach(entity => {
+                     cy.add({
+                            data: { id: entity.id, name: entity.name }
+                      });
+
+                });
+
+                
+                response.contracts.forEach(contract => {
+                     cy.add({
+                            data: { 
+                                id: contract.entityA+contract.entityB,
+                                source: contract.entityA,
+                                target: contract.entityB
+                             }
+                      });
+
+                });
+                
+
+                cy.layout({name:"breadthfirst"}).run();
+
+               
+
+            });
+        });
+
+           
+           
+        </script>
+        
+    
+
+

@@ -1,0 +1,49 @@
+@model ContractingPlatform.Models.Contract
+
+@{
+    ViewData["Title"] = "Edit";
+    var selectList = new SelectList(ViewBag.EntityList as List<Entity>,"Id","Name");
+}
+
+<h1>Edit</h1>
+
+<h4>Contract</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ContractId" />
+            <div class="form-group">
+                <label asp-for="EntityA" class="control-label"></label><br/>
+                <select asp-for="EntityA" class="control-label"  asp-items="selectList">
+                </select><br/>
+                <span asp-validation-for="EntityA" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntityB" class="control-label"></label><br/>
+                <select asp-for="EntityB" class="control-label"  asp-items="selectList">
+                </select><br/>
+                <span asp-validation-for="EntityB" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @{
+                    if(ViewData["Error"] != null) {
+                         <span class="text-danger">@ViewData["Error"] </span>
+                    }
+                }               
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
