@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Details";
+    
+    var entityList = ViewBag.EntityList as List<Entity>;
+    var contracts =  ViewBag.Contracts as List<string>;
 }
 
 <h1>Details</h1>
@@ -30,6 +33,29 @@
         </dd>
     </dl>
 </div>
+<h5>Contracts With</h5>
+<table class="table">
+    <tbody>
+@{
+    if (ViewData["Message"] == null) {
+        foreach (var entityId in contracts) {
+            <tr>
+                <td>
+                @entityList.Find(e=>e.Id == entityId).Name
+                </td>
+            </tr>
+        }
+    }
+    else {
+        <tr>
+            <td>
+            @ViewData["Message"]
+            </td>
+        </tr>
+    }
+}
+    </tbody>
+</table>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.MgaId">Edit</a> |
     <a asp-action="Index">Back to List</a>

@@ -17,6 +17,7 @@ namespace ContractingPlatform.Controllers
         public AdvisorController(ContractingPlatformContext context)
         {
             _context = context;
+            
         }
 
         // GET: Advisor
@@ -39,6 +40,46 @@ namespace ContractingPlatform.Controllers
             {
                 return NotFound();
             }
+
+            var graph = new Graph();
+            foreach(var c in _context.Contract) {
+                graph.AddEdge(c.EntityA,c.EntityB);
+            }
+            var adjacencyList = graph.AdjacencyList;
+
+            var query =                     
+                    ((from carrier in _context.Carrier
+                    select new {
+                        Id = "C" + carrier.CarrierId,
+                        carrier.Name
+                    }).OrderBy(e=>e.Name))
+                    .Union((from mga in _context.MGA
+                    select new {
+                        Id = "M" + mga.MgaId,
+                        mga.Name
+                    }).OrderBy(e=>e.Name))
+                    .Union((from adv in _context.Advisor
+                    select new {
+                        Id = "A" + adv.AdvisorId,
+                        Name = adv.FirstName + " " + adv.LastName
+                    }).OrderBy(e=>e.Name))
+                    .Select(entity => new  Entity() {
+                        Id = entity.Id,
+                        Name = entity.Name
+                    })
+                    ;
+
+            var entityList = query.ToList();
+
+            var contracts = adjacencyList.ContainsKey("A"+id) ? adjacencyList["A"+id] : new List<string>();
+
+            if(contracts.Count() == 0) {
+                ViewData["Message"] = "No contracts exist";
+            }
+            ViewData["Contracts"] = contracts;
+            ViewData["EntityList"] = entityList;
+
+
 
             return View(advisor);
         }

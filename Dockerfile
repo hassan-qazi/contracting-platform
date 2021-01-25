@@ -8,10 +8,8 @@ RUN dotnet restore
 
 # copy everything else and build app
 COPY . ./
-# RUN dotnet publish -c Release -o published --no-restore
 
-# final stage/image
-# FROM mcr.microsoft.com/dotnet/aspnet:5.0
-# WORKDIR /app
-# COPY --from=build /app/published .
+EXPOSE 5000
+EXPOSE 5001
+ENV ASPNETCORE_URLS=http://*:5000;https://*:5001
 ENTRYPOINT ["dotnet", "run"]
